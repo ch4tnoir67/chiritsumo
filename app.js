@@ -25,12 +25,12 @@ const TRANSACTIONS_DATA = [
 ];
 
 const HOLDINGS_DATA = [
-  { name: '全世界株式', ticker: 'VT', amount: 8942, change: 6.2, percent: 36, color: '#6C63FF' },
-  { name: '米国 S&P500', ticker: 'VOO', amount: 6214, change: 8.1, percent: 25, color: '#3CDFAB' },
-  { name: '先進国株式', ticker: 'VEA', amount: 3721, change: 3.4, percent: 15, color: '#FF6B9D' },
-  { name: '新興国株式', ticker: 'VWO', amount: 2486, change: -1.2, percent: 10, color: '#FFB347' },
-  { name: '日本株式', ticker: 'EWJ', amount: 2241, change: 4.8, percent: 9, color: '#4FC3F7' },
-  { name: '債券', ticker: 'BND', amount: 1227, change: 1.1, percent: 5, color: '#B388FF' },
+  { name: '全世界株式', ticker: 'VT', amount: 8942, change: 6.2, percent: 36, color: '#6C63FF', icon: '🌍' },
+  { name: '米国 S&P500', ticker: 'VOO', amount: 6214, change: 8.1, percent: 25, color: '#3CDFAB', icon: '🇺🇸' },
+  { name: '先進国株式', ticker: 'VEA', amount: 3721, change: 3.4, percent: 15, color: '#FF6B9D', icon: '🏢' },
+  { name: '新興国株式', ticker: 'VWO', amount: 2486, change: -1.2, percent: 10, color: '#FFB347', icon: '🌏' },
+  { name: '日本株式', ticker: 'EWJ', amount: 2241, change: 4.8, percent: 9, color: '#4FC3F7', icon: '🇯🇵' },
+  { name: '債券', ticker: 'BND', amount: 1227, change: 1.1, percent: 5, color: '#B388FF', icon: '🏛️' },
 ];
 
 const COMMUNITY_USERS = [
@@ -98,6 +98,7 @@ let currentTab = 'home';
 let isAmountHidden = false;
 let likedPosts = new Set();
 let animationFrameId = null;
+let currentInvestmentTarget = HOLDINGS_DATA[0];
 
 // ==========================================
 // INITIALIZATION
@@ -183,6 +184,7 @@ function initApp() {
   renderFullTransactions();
   renderCommunityPreview();
   renderHoldings();
+  renderTopHoldings();
   renderTrending();
   renderCommunityFeed();
   renderNotifications();
@@ -299,16 +301,53 @@ function renderHoldings() {
   const container = document.getElementById('holdings-list');
   container.innerHTML = HOLDINGS_DATA.map(h => `
     <div class="holding-item">
-      <div class="holding-color" style="background: ${h.color}"></div>
+      <div class="holding-icon" style="background: ${h.color}20; color: ${h.color}">
+        ${h.icon}
+      </div>
       <div class="holding-info">
-        <div class="holding-name">${h.name}</div>
-        <div class="holding-ticker">${h.ticker} · ${h.percent}%</div>
+        <div class="holding-name-row">
+          <span class="holding-name">${h.name}</span>
+          <span class="holding-ticker">${h.ticker}</span>
+        </div>
+        <div class="holding-bar-container">
+          <div class="holding-bar-bg">
+            <div class="holding-bar-fill" style="width: ${h.percent}%; background: ${h.color}"></div>
+          </div>
+          <span class="holding-percent">${h.percent}%</span>
+        </div>
       </div>
       <div class="holding-values">
         <div class="holding-amount">¥${h.amount.toLocaleString()}</div>
         <div class="holding-change ${h.change >= 0 ? 'positive' : 'negative'}">
           ${h.change >= 0 ? '+' : ''}${h.change}%
         </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderTopHoldings() {
+  const container = document.getElementById('top-holdings-list');
+  if (!container) return;
+  const topHoldings = HOLDINGS_DATA.slice(0, 2);
+  container.innerHTML = topHoldings.map(h => `
+    <div class="holding-item top-holding-item" onclick="switchTab('portfolio')">
+      <div class="holding-icon" style="background: ${h.color}20; color: ${h.color}">
+        ${h.icon}
+      </div>
+      <div class="holding-info">
+        <div class="holding-name-row">
+          <span class="holding-name">${h.name}</span>
+          <span class="holding-ticker">${h.ticker}</span>
+        </div>
+        <div class="holding-bar-container">
+          <div class="holding-bar-bg">
+            <div class="holding-bar-fill" style="width: ${h.percent}%; background: ${h.color}"></div>
+          </div>
+        </div>
+      </div>
+      <div class="holding-values">
+        <div class="holding-amount">¥${h.amount.toLocaleString()}</div>
       </div>
     </div>
   `).join('');
@@ -662,6 +701,11 @@ function setupSettings() {
     showRoundupModal();
   });
 
+  // Investment target setting
+  document.getElementById('setting-investment-target').addEventListener('click', () => {
+    showInvestmentTargetModal();
+  });
+
   // Dark mode toggle
   document.getElementById('darkmode-toggle').addEventListener('change', function() {
     if (this.checked) {
@@ -743,7 +787,7 @@ function showTransactionDetail(id) {
       </div>
       <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border);">
         <span style="color: var(--text-tertiary); font-size: 0.85rem;">投資先</span>
-        <span style="font-weight: 600;">全世界株式 (VT)</span>
+        <span style="font-weight: 600;">${currentInvestmentTarget.name} (${currentInvestmentTarget.ticker})</span>
       </div>
       <div style="display: flex; justify-content: space-between; padding: 12px 0;">
         <span style="color: var(--text-tertiary); font-size: 0.85rem;">日時</span>
@@ -854,6 +898,46 @@ function selectRoundup(element, value) {
     closeModal();
     showToast('✅', `おつり切り上げ単位を${value.toLocaleString()}円に変更しました`);
   }, 300);
+}
+
+function showInvestmentTargetModal() {
+  const modal = document.getElementById('modal-content');
+  modal.innerHTML = `
+    <div class="modal-handle"></div>
+    <div class="modal-title">おつり投資先の選択</div>
+    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 20px;">
+      日々のおつりを自動的に投資する銘柄を1つ選択してください。
+    </p>
+    <div class="holdings-list" style="margin-bottom: 24px;">
+      ${HOLDINGS_DATA.map(h => `
+        <div class="holding-item" style="cursor: pointer; ${currentInvestmentTarget.ticker === h.ticker ? 'border-color: var(--accent-primary); background: var(--bg-card-hover);' : ''}" onclick="selectInvestmentTarget('${h.ticker}')">
+          <div class="holding-icon" style="background: ${h.color}20; color: ${h.color}">
+            ${h.icon}
+          </div>
+          <div class="holding-info">
+            <div class="holding-name-row" style="margin-bottom: 0;">
+              <span class="holding-name">${h.name}</span>
+              <span class="holding-ticker">${h.ticker}</span>
+            </div>
+          </div>
+          <div class="holding-values">
+            ${currentInvestmentTarget.ticker === h.ticker ? `<span style="color: var(--accent-primary); font-weight: 700; font-size: 0.85rem;">選択中</span>` : ''}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+  document.getElementById('modal-overlay').classList.remove('hidden');
+}
+
+function selectInvestmentTarget(ticker) {
+  const target = HOLDINGS_DATA.find(h => h.ticker === ticker);
+  if (target) {
+    currentInvestmentTarget = target;
+    document.getElementById('current-investment-target-label').textContent = `現在: ${target.name} (${target.ticker})`;
+    closeModal();
+    showToast('✅', `投資先を ${target.name} に変更しました`);
+  }
 }
 
 function closeModal() {
