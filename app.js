@@ -25,12 +25,12 @@ const TRANSACTIONS_DATA = [
 ];
 
 const HOLDINGS_DATA = [
-  { name: '全世界株式', ticker: 'VT', amount: 8942, change: 6.2, percent: 36, color: '#6C63FF', icon: '🌍' },
-  { name: '米国 S&P500', ticker: 'VOO', amount: 6214, change: 8.1, percent: 25, color: '#3CDFAB', icon: '🇺🇸' },
-  { name: '先進国株式', ticker: 'VEA', amount: 3721, change: 3.4, percent: 15, color: '#FF6B9D', icon: '🏢' },
-  { name: '新興国株式', ticker: 'VWO', amount: 2486, change: -1.2, percent: 10, color: '#FFB347', icon: '🌏' },
-  { name: '日本株式', ticker: 'EWJ', amount: 2241, change: 4.8, percent: 9, color: '#4FC3F7', icon: '🇯🇵' },
-  { name: '債券', ticker: 'BND', amount: 1227, change: 1.1, percent: 5, color: '#B388FF', icon: '🏛️' },
+  { name: '全世界株式', ticker: 'VT',  amount: 8942, change: 6.2,  gainLoss: +522, percent: 36, color: '#6C63FF', icon: '🌍' },
+  { name: '米国 S&P500', ticker: 'VOO', amount: 6214, change: 8.1,  gainLoss: +464, percent: 25, color: '#3CDFAB', icon: '🇺🇸' },
+  { name: '先進国株式', ticker: 'VEA', amount: 3721, change: 3.4,  gainLoss: +122, percent: 15, color: '#FF6B9D', icon: '🏢' },
+  { name: '新興国株式', ticker: 'VWO', amount: 2486, change: -1.2, gainLoss: -30,  percent: 10, color: '#FFB347', icon: '🌏' },
+  { name: '日本株式',   ticker: 'EWJ', amount: 2241, change: 4.8,  gainLoss: +103, percent: 9,  color: '#4FC3F7', icon: '🇯🇵' },
+  { name: '債券',       ticker: 'BND', amount: 1227, change: 1.1,  gainLoss: +13,  percent: 5,  color: '#B388FF', icon: '🏛️' },
 ];
 
 const COMMUNITY_USERS = [
@@ -42,12 +42,29 @@ const COMMUNITY_USERS = [
 ];
 
 const TRENDING_STOCKS = [
-  { flag: '🌍', name: '全世界株式', ticker: 'VT', change: '+2.4%', positive: true },
-  { flag: '🇺🇸', name: 'S&P500', ticker: 'VOO', change: '+3.1%', positive: true },
-  { flag: '🇯🇵', name: '日経225', ticker: 'EWJ', change: '+1.8%', positive: true },
-  { flag: '🌏', name: '新興国株', ticker: 'VWO', change: '-0.6%', positive: false },
-  { flag: '🇪🇺', name: '欧州株', ticker: 'VGK', change: '+1.2%', positive: true },
+  { flag: '🌍', name: '全世界株式', ticker: 'VT',  change: '+2.4%', positive: true },
+  { flag: '🇺🇸', name: 'S&P500',   ticker: 'VOO', change: '+3.1%', positive: true },
+  { flag: '🇯🇵', name: '日経225',  ticker: 'EWJ', change: '+1.8%', positive: true },
+  { flag: '🌏', name: '新興国株',  ticker: 'VWO', change: '-0.6%', positive: false },
+  { flag: '🇪🇺', name: '欧州株',   ticker: 'VGK', change: '+1.2%', positive: true },
 ];
+
+const RANKING_DATA = [
+  { rank: 1, user: '高橋さん', initial: '高', color: '#3CDFAB', total: 18420, badge: '🥇' },
+  { rank: 2, user: '田中さん', initial: '田', color: '#FF6B9D', total: 12350, badge: '🥈' },
+  { rank: 3, user: '佐藤さん', initial: '佐', color: '#FFB347', total: 9870,  badge: '🥉' },
+  { rank: 4, user: '伊織さん', initial: '伊', color: '#6C63FF', total: 7240,  badge: null, isMe: true },
+  { rank: 5, user: '鈴木さん', initial: '鈴', color: '#4FC3F7', total: 5610,  badge: null },
+];
+
+// Performance chart data sets per period
+const PERF_DATA = {
+  '1w': { my: [4.8, 4.9, 4.7, 5.0, 5.1, 5.2, 5.3], avg: [3.0, 3.0, 3.1, 3.1, 3.1, 3.2, 3.2], labels: ['月','火','水','木','金','土','日'] },
+  '1m': { my: [0,0.5,1.2,1.8,2.1,2.8,3.2,3.8,4.1,4.5,4.8,5.3], avg: [0,0.3,0.8,1.0,1.3,1.8,2.0,2.3,2.5,2.8,3.0,3.2], labels: ['1週','','','2週','','','3週','','','4週','',''] },
+  '3m': { my: [0,1.0,1.8,2.5,3.0,3.8,4.5,5.0,5.3,5.5,5.2,5.3], avg: [0,0.5,0.9,1.2,1.6,2.0,2.4,2.8,3.0,3.1,3.1,3.2], labels: ['4月','','','5月','','','6月','','','7月','',''] },
+  '1y': { my: [0,0.5,1.2,1.8,2.1,2.8,3.2,3.8,4.1,4.5,4.8,5.3], avg: [0,0.3,0.8,1.0,1.3,1.8,2.0,2.3,2.5,2.8,3.0,3.2], labels: ['6月','7月','8月','9月','10月','11月','12月','1月','2月','3月','4月','5月'] },
+};
+let currentPerfPeriod = '1m';
 
 const FEED_DATA = [
   {
@@ -97,6 +114,7 @@ let currentSlide = 0;
 let currentTab = 'home';
 let isAmountHidden = false;
 let likedPosts = new Set();
+let openComments = new Set();
 let animationFrameId = null;
 let currentInvestmentTarget = HOLDINGS_DATA[0];
 
@@ -116,6 +134,8 @@ document.addEventListener('DOMContentLoaded', () => {
   setupSettings();
   setupEyeToggle();
   setupPeriodSelector();
+  setupPerformancePeriodSelector();
+  setupFab();
 });
 
 // ==========================================
@@ -188,6 +208,8 @@ function initApp() {
   renderTrending();
   renderCommunityFeed();
   renderNotifications();
+  renderRanking();
+  initGoalBanner();
 
   // Draw charts after a short delay for animations
   setTimeout(() => {
@@ -318,8 +340,9 @@ function renderHoldings() {
       </div>
       <div class="holding-values">
         <div class="holding-amount">¥${h.amount.toLocaleString()}</div>
-        <div class="holding-change ${h.change >= 0 ? 'positive' : 'negative'}">
-          ${h.change >= 0 ? '+' : ''}${h.change}%
+        <div class="holding-gain-loss ${h.gainLoss >= 0 ? 'positive' : 'negative'}">
+          ${h.gainLoss >= 0 ? '+' : ''}¥${Math.abs(h.gainLoss).toLocaleString()}
+          <span class="holding-change-pct">(${h.change >= 0 ? '+' : ''}${h.change}%)</span>
         </div>
       </div>
     </div>
@@ -390,15 +413,93 @@ function renderCommunityFeed() {
           </svg>
           <span>${f.likes + (likedPosts.has(i) ? 1 : 0)}</span>
         </button>
-        <button class="feed-action-btn">
+        <button class="feed-action-btn ${openComments.has(i) ? 'comment-active' : ''}" onclick="toggleComment(${i})">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
           </svg>
-          <span>${f.comments}</span>
+          <span>${f.comments + (openComments.has(i) ? 0 : 0)}</span>
         </button>
       </div>
+      ${openComments.has(i) ? `
+        <div class="comment-panel" id="comment-panel-${i}">
+          <div class="comment-list">
+            <div class="comment-item">
+              <div class="comment-avatar" style="background: #FF6B9D">田</div>
+              <div class="comment-body"><span class="comment-user">田中さん</span><span class="comment-text"> すごい！私も頑張ります✨</span></div>
+            </div>
+            <div class="comment-item">
+              <div class="comment-avatar" style="background: #4FC3F7">鈴</div>
+              <div class="comment-body"><span class="comment-user">鈴木さん</span><span class="comment-text"> 一緒に積み立てしましょう！</span></div>
+            </div>
+          </div>
+          <div class="comment-input-row">
+            <input class="comment-input" id="comment-input-${i}" type="text" placeholder="コメントを入力…" />
+            <button class="comment-send-btn" onclick="sendComment(${i})">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+            </button>
+          </div>
+        </div>
+      ` : ''}
     </div>
   `).join('');
+}
+
+function toggleComment(index) {
+  if (openComments.has(index)) {
+    openComments.delete(index);
+  } else {
+    openComments.add(index);
+  }
+  renderCommunityFeed();
+  // Focus input if opening
+  if (openComments.has(index)) {
+    setTimeout(() => {
+      const inp = document.getElementById(`comment-input-${index}`);
+      if (inp) inp.focus();
+    }, 50);
+  }
+}
+
+function sendComment(index) {
+  const inp = document.getElementById(`comment-input-${index}`);
+  if (!inp || !inp.value.trim()) return;
+  showToast('💬', 'コメントを送信しました！');
+  inp.value = '';
+}
+
+function renderRanking() {
+  const container = document.getElementById('ranking-list');
+  if (!container) return;
+  container.innerHTML = RANKING_DATA.map(r => `
+    <div class="ranking-item ${r.isMe ? 'ranking-me' : ''}">
+      <div class="ranking-rank">
+        ${r.badge ? `<span class="ranking-badge">${r.badge}</span>` : `<span class="ranking-num">${r.rank}</span>`}
+      </div>
+      <div class="ranking-avatar" style="background: ${r.color}">${r.initial}</div>
+      <div class="ranking-info">
+        <span class="ranking-user">${r.user}${r.isMe ? ' <span class="ranking-me-tag">あなた</span>' : ''}</span>
+      </div>
+      <div class="ranking-amount">¥${r.total.toLocaleString()}</div>
+    </div>
+  `).join('');
+}
+
+function initGoalBanner() {
+  const goal = 50000;
+  const current = 24831;
+  const pct = (current / goal * 100).toFixed(1);
+  const endOfYear = new Date(new Date().getFullYear(), 11, 31);
+  const today = new Date();
+  const daysLeft = Math.ceil((endOfYear - today) / (1000 * 60 * 60 * 24));
+
+  const fillEl = document.getElementById('goal-progress-fill');
+  const pctEl = document.getElementById('goal-pct');
+  const daysEl = document.getElementById('goal-days-badge');
+  const currEl = document.getElementById('goal-current');
+  if (fillEl) fillEl.style.width = pct + '%';
+  if (pctEl) pctEl.textContent = pct + '%';
+  if (daysEl) daysEl.textContent = '残り' + daysLeft + '日';
+  if (currEl) currEl.textContent = '¥' + current.toLocaleString() + ' 達成';
 }
 
 function renderNotifications() {
@@ -604,9 +705,9 @@ function drawPerformanceChart() {
   const w = canvas.offsetWidth;
   const h = canvas.offsetHeight;
 
-  const myData = [0, 0.5, 1.2, 1.8, 2.1, 2.8, 3.2, 3.8, 4.1, 4.5, 4.8, 5.3];
-  const avgData = [0, 0.3, 0.8, 1.0, 1.3, 1.8, 2.0, 2.3, 2.5, 2.8, 3.0, 3.2];
-  const months = ['6月', '7月', '8月', '9月', '10月', '11月', '12月', '1月', '2月', '3月', '4月', '5月'];
+  const dataset = PERF_DATA[currentPerfPeriod];
+  const myData = dataset.my;
+  const avgData = dataset.avg;
 
   const allData = [...myData, ...avgData];
   const min = Math.min(...allData) - 0.5;
@@ -753,6 +854,37 @@ function setupPeriodSelector() {
       showToast('📊', `${this.textContent}のデータに切り替えました`);
     });
   });
+}
+
+function setupPerformancePeriodSelector() {
+  document.querySelectorAll('.perf-period-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.perf-period-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      currentPerfPeriod = this.dataset.perf;
+      drawPerformanceChart();
+    });
+  });
+}
+
+function setupFab() {
+  const fab = document.getElementById('fab-invest');
+  if (!fab) return;
+  // Show FAB only on home tab
+  const updateFabVisibility = () => {
+    if (currentTab === 'home') {
+      fab.classList.remove('fab-hidden');
+    } else {
+      fab.classList.add('fab-hidden');
+    }
+  };
+  // Override switchTab to also update FAB
+  const origSwitch = window.switchTab;
+  window.switchTab = (tab) => {
+    origSwitch(tab);
+    updateFabVisibility();
+  };
+  updateFabVisibility();
 }
 
 function toggleLike(index, btn) {
@@ -940,6 +1072,61 @@ function selectInvestmentTarget(ticker) {
   }
 }
 
+function showManualInvestModal() {
+  const modal = document.getElementById('modal-content');
+  const amounts = [500, 1000, 3000, 5000];
+  modal.innerHTML = `
+    <div class="modal-handle"></div>
+    <div class="modal-title">💰 手動で追加投資</div>
+    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 20px;">
+      おつり以外に任意の金額を今すぐ投資できます。
+    </p>
+    <div class="manual-invest-amounts">
+      ${amounts.map(a => `
+        <button class="manual-amount-btn" onclick="selectManualAmount(${a}, this)">¥${a.toLocaleString()}</button>
+      `).join('')}
+    </div>
+    <div class="manual-invest-custom">
+      <label style="font-size: 0.82rem; color: var(--text-tertiary); margin-bottom: 8px; display: block;">金額を入力</label>
+      <div class="manual-input-row">
+        <span class="manual-yen-sign">¥</span>
+        <input type="number" id="manual-invest-input" class="manual-invest-input" placeholder="1000" min="1" max="100000" />
+      </div>
+    </div>
+    <div style="margin-top: 12px; padding: 14px; background: var(--bg-elevated); border-radius: var(--radius-md);">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 0.85rem; color: var(--text-tertiary);">投資先</span>
+        <span style="font-weight: 600; font-size: 0.9rem;">${currentInvestmentTarget.name} (${currentInvestmentTarget.ticker})</span>
+      </div>
+    </div>
+    <button class="manual-invest-confirm-btn" onclick="confirmManualInvest()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px;height:18px;">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+      投資を確定する
+    </button>
+  `;
+  document.getElementById('modal-overlay').classList.remove('hidden');
+}
+
+function selectManualAmount(amount, btn) {
+  document.querySelectorAll('.manual-amount-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('manual-invest-input').value = amount;
+}
+
+function confirmManualInvest() {
+  const inp = document.getElementById('manual-invest-input');
+  const amount = parseInt(inp ? inp.value : 0);
+  if (!amount || amount < 1) {
+    showToast('⚠️', '金額を入力してください');
+    return;
+  }
+  closeModal();
+  showToast('✅', `¥${amount.toLocaleString()}を${currentInvestmentTarget.name}に投資しました！`);
+  setTimeout(() => showCelebration('投資完了！', `¥${amount.toLocaleString()}が\n${currentInvestmentTarget.name}に投資されました 🚀`), 400);
+}
+
 function closeModal() {
   document.getElementById('modal-overlay').classList.add('hidden');
 }
@@ -1019,3 +1206,12 @@ window.addEventListener('resize', () => {
 
 // Make switchTab globally accessible
 window.switchTab = switchTab;
+window.showManualInvestModal = showManualInvestModal;
+window.confirmManualInvest = confirmManualInvest;
+window.selectManualAmount = selectManualAmount;
+window.toggleComment = toggleComment;
+window.sendComment = sendComment;
+window.toggleLike = toggleLike;
+window.showTransactionDetail = showTransactionDetail;
+window.selectRoundup = selectRoundup;
+window.selectInvestmentTarget = selectInvestmentTarget;

@@ -207,6 +207,34 @@
           </div>
         </div>
 
+        <!-- Goal Banner -->
+        <div class="goal-banner" id="goal-banner">
+          <div class="goal-banner-top">
+            <div class="goal-banner-left">
+              <span class="goal-label">🎯 目標</span>
+              <span class="goal-title">年末までに¥50,000</span>
+            </div>
+            <div class="goal-days-badge" id="goal-days-badge">残り205日</div>
+          </div>
+          <div class="goal-progress-track">
+            <div class="goal-progress-fill" id="goal-progress-fill" style="width: 49.7%;"></div>
+          </div>
+          <div class="goal-progress-labels">
+            <span class="goal-current" id="goal-current">¥24,831 達成</span>
+            <span class="goal-pct" id="goal-pct">49.7%</span>
+          </div>
+        </div>
+
+        <!-- Roundup Prediction Banner -->
+        <div class="prediction-banner">
+          <div class="prediction-icon">⚡</div>
+          <div class="prediction-content">
+            <span class="prediction-title">次の投資予測</span>
+            <span class="prediction-text" id="prediction-text">今日あと<strong>¥83</strong>使うと<strong>¥100</strong>投資されます</span>
+          </div>
+          <div class="prediction-arrow">›</div>
+        </div>
+
         <!-- Quick Stats -->
         <div class="quick-stats">
           <div class="stat-card">
@@ -340,7 +368,15 @@
 
         <!-- Performance Card -->
         <div class="performance-card">
-          <h4>パフォーマンス</h4>
+          <div class="performance-card-header">
+            <h4>パフォーマンス</h4>
+            <div class="perf-period-selector" id="perf-period-selector">
+              <button class="perf-period-btn" data-perf="1w">1週</button>
+              <button class="perf-period-btn active" data-perf="1m">1ヶ月</button>
+              <button class="perf-period-btn" data-perf="3m">3ヶ月</button>
+              <button class="perf-period-btn" data-perf="1y">1年</button>
+            </div>
+          </div>
           <canvas id="performance-chart" width="320" height="160"></canvas>
           <div class="performance-legend">
             <div class="legend-item">
@@ -365,6 +401,17 @@
         <div class="trending-section">
           <h3 class="trending-title">🔥 人気の銘柄</h3>
           <div class="trending-list" id="trending-list">
+            <!-- Dynamically generated -->
+          </div>
+        </div>
+
+        <!-- Monthly Ranking -->
+        <div class="ranking-card" id="ranking-card">
+          <div class="ranking-header">
+            <span class="ranking-title">🏆 今月の積立王</span>
+            <span class="ranking-period">2026年5月</span>
+          </div>
+          <div class="ranking-list" id="ranking-list">
             <!-- Dynamically generated -->
           </div>
         </div>
@@ -585,6 +632,15 @@
         <span>設定</span>
       </button>
     </nav>
+
+    <!-- Manual Investment FAB -->
+    <button class="fab-invest" id="fab-invest" onclick="showManualInvestModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      <span>手動投資</span>
+    </button>
 
     <!-- Notification Panel -->
     <div class="notification-panel hidden" id="notification-panel">
