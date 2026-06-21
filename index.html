@@ -5,10 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>チリツモ - おつりで始める世界投資</title>
   <meta name="description" content="普段の買い物のおつりやポイントを自動で世界株に分散投資。1円から始められるマイクロ投資アプリ。">
+  <!-- Open Graph / SEO -->
+  <meta property="og:title" content="チリツモ - おつりで始める世界投資">
+  <meta property="og:description" content="おつりやポイントで1円から世界株に投資できるマイクロ投資アプリ。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://yourdomain.example.com/">
+  <meta property="og:image" content="/chiritsumo_icon_192_1782051397440.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="チリツモ - おつりで始める世界投資">
+  <meta name="twitter:description" content="おつりやポイントで1円から世界株に投資できるマイクロ投資アプリ。">
+  <meta name="twitter:image" content="/chiritsumo_icon_192_1782051397440.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+JP:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
 </head>
 <body>
   <!-- Splash Screen -->
@@ -683,5 +694,12 @@
   </div>
 
   <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+        .then(() => console.log('Service Worker registered'))
+        .catch(err => console.error('Service Worker registration failed:', err));
+    }
+  </script>
 </body>
 </html>
