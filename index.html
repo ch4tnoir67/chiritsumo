@@ -709,8 +709,24 @@
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log('Service Worker registered'))
+        .then((reg) => {
+          console.log('Service Worker registered');
+          // 新しいSWがactivateされたらページをリロード
+          reg.addEventListener('updatefound', () => {
+            const newWorker = reg.installing;
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'activated') {
+                window.location.reload();
+              }
+            });
+          });
+        })
         .catch(err => console.error('Service Worker registration failed:', err));
+      
+      // SW引き継ぎ時にもリロード
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        window.location.reload();
+      });
     }
   </script>
 </body>
