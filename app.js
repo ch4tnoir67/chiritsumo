@@ -149,26 +149,20 @@ let totalAssets = 24831;
 document.addEventListener('DOMContentLoaded', () => {
   // Splash → Onboarding after splash animation
   setTimeout(() => {
-    document.getElementById('splash-screen').classList.add('hidden');
-    document.getElementById('onboarding-screen').classList.remove('hidden');
+    const splash = document.getElementById('splash-screen');
+    const onboard = document.getElementById('onboarding-screen');
+    if (splash) splash.classList.add('hidden');
+    if (onboard) onboard.classList.remove('hidden');
   }, 3400);
 
-  setupOnboarding();
-  setupNavigation();
-  setupNotifications();
-  setupSettings();
-  setupEyeToggle();
-  setupPeriodSelector();
-  setupPerformancePeriodSelector();
-  setupFab();
-  
-  const closeBtn = document.getElementById('celebration-close');
-  if (closeBtn) {
-    closeBtn.addEventListener('click', () => {
-      document.getElementById('celebration-overlay').classList.add('hidden');
-      document.getElementById('confetti-container').innerHTML = '';
-    });
-  }
+  try { setupOnboarding(); } catch(e) { console.error('setupOnboarding:', e); }
+  try { setupNavigation(); } catch(e) { console.error('setupNavigation:', e); }
+  try { setupNotifications(); } catch(e) { console.error('setupNotifications:', e); }
+  try { setupSettings(); } catch(e) { console.error('setupSettings:', e); }
+  try { setupEyeToggle(); } catch(e) { console.error('setupEyeToggle:', e); }
+  try { setupPeriodSelector(); } catch(e) { console.error('setupPeriodSelector:', e); }
+  try { setupPerformancePeriodSelector(); } catch(e) { console.error('setupPerformancePeriodSelector:', e); }
+  try { setupFab(); } catch(e) { console.error('setupFab:', e); }
 });
 
 // ==========================================
@@ -769,45 +763,47 @@ function drawPerformanceChart() {
 // INTERACTIONS
 // ==========================================
 function setupEyeToggle() {
-  document.getElementById('eye-toggle').addEventListener('click', () => {
+  document.getElementById('eye-toggle')?.addEventListener('click', () => {
     isAmountHidden = !isAmountHidden;
     const amountEl = document.getElementById('portfolio-amount');
-    if (isAmountHidden) {
-      amountEl.classList.add('masked');
-    } else {
-      amountEl.classList.remove('masked');
+    if (amountEl) {
+      if (isAmountHidden) {
+        amountEl.classList.add('masked');
+      } else {
+        amountEl.classList.remove('masked');
+      }
     }
   });
 }
 
 function setupNotifications() {
-  document.getElementById('notification-btn').addEventListener('click', () => {
+  document.getElementById('notification-btn')?.addEventListener('click', () => {
     const panel = document.getElementById('notification-panel');
-    panel.classList.toggle('hidden');
+    panel?.classList.toggle('hidden');
   });
-  document.getElementById('close-notification').addEventListener('click', () => {
-    document.getElementById('notification-panel').classList.add('hidden');
+  document.getElementById('close-notification')?.addEventListener('click', () => {
+    document.getElementById('notification-panel')?.classList.add('hidden');
   });
 }
 
 function setupSettings() {
   // Accounts setting
-  document.getElementById('setting-accounts').addEventListener('click', () => {
+  document.getElementById('setting-accounts')?.addEventListener('click', () => {
     showAccountsModal();
   });
 
   // Round-up setting
-  document.getElementById('setting-roundup').addEventListener('click', () => {
+  document.getElementById('setting-roundup')?.addEventListener('click', () => {
     showRoundupModal();
   });
 
   // Investment target setting
-  document.getElementById('setting-investment-target').addEventListener('click', () => {
+  document.getElementById('setting-investment-target')?.addEventListener('click', () => {
     showInvestmentTargetModal();
   });
 
   // Dark mode toggle
-  document.getElementById('darkmode-toggle').addEventListener('change', function() {
+  document.getElementById('darkmode-toggle')?.addEventListener('change', function() {
     if (this.checked) {
       document.body.classList.remove('light-mode');
     } else {
@@ -823,7 +819,7 @@ function setupSettings() {
   });
 
   // Auto invest toggle
-  document.getElementById('auto-invest-toggle').addEventListener('change', function() {
+  document.getElementById('auto-invest-toggle')?.addEventListener('change', function() {
     if (this.checked) {
       showToast('✅', '自動投資をONにしました');
     } else {
@@ -832,15 +828,17 @@ function setupSettings() {
   });
 
   // Modal close
-  document.getElementById('modal-overlay').addEventListener('click', (e) => {
+  document.getElementById('modal-overlay')?.addEventListener('click', (e) => {
     if (e.target === document.getElementById('modal-overlay')) {
       closeModal();
     }
   });
 
   // Celebration close
-  document.getElementById('celebration-close').addEventListener('click', () => {
-    document.getElementById('celebration-overlay').classList.add('hidden');
+  document.getElementById('celebration-close')?.addEventListener('click', () => {
+    document.getElementById('celebration-overlay')?.classList.add('hidden');
+    const confetti = document.getElementById('confetti-container');
+    if (confetti) confetti.innerHTML = '';
   });
 }
 
