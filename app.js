@@ -59,10 +59,30 @@ const RANKING_DATA = [
 
 // Performance chart data sets per period
 const PERF_DATA = {
-  '1w': { my: [4.8, 4.9, 4.7, 5.0, 5.1, 5.2, 5.3], avg: [3.0, 3.0, 3.1, 3.1, 3.1, 3.2, 3.2], labels: ['月','火','水','木','金','土','日'] },
-  '1m': { my: [0,0.5,1.2,1.8,2.1,2.8,3.2,3.8,4.1,4.5,4.8,5.3], avg: [0,0.3,0.8,1.0,1.3,1.8,2.0,2.3,2.5,2.8,3.0,3.2], labels: ['1週','','','2週','','','3週','','','4週','',''] },
-  '3m': { my: [0,1.0,1.8,2.5,3.0,3.8,4.5,5.0,5.3,5.5,5.2,5.3], avg: [0,0.5,0.9,1.2,1.6,2.0,2.4,2.8,3.0,3.1,3.1,3.2], labels: ['4月','','','5月','','','6月','','','7月','',''] },
-  '1y': { my: [0,0.5,1.2,1.8,2.1,2.8,3.2,3.8,4.1,4.5,4.8,5.3], avg: [0,0.3,0.8,1.0,1.3,1.8,2.0,2.3,2.5,2.8,3.0,3.2], labels: ['6月','7月','8月','9月','10月','11月','12月','1月','2月','3月','4月','5月'] },
+  '1w': { 
+    my: [4.8, 4.9, 4.7, 5.0, 5.1, 5.2, 5.3], 
+    avg: [3.0, 3.0, 3.1, 3.1, 3.1, 3.2, 3.2], 
+    ai_pred: [null, null, null, null, null, null, 5.3, 5.5, 5.8, 6.2],
+    labels: ['月','火','水','木','金','土','日', '予', '測', '🏁'] 
+  },
+  '1m': { 
+    my: [0,0.5,1.2,1.8,2.1,2.8,3.2,3.8,4.1,4.5,4.8,5.3], 
+    avg: [0,0.3,0.8,1.0,1.3,1.8,2.0,2.3,2.5,2.8,3.0,3.2], 
+    ai_pred: [null,null,null,null,null,null,null,null,null,null,null,5.3, 5.6, 6.1, 6.8],
+    labels: ['1週','','','2週','','','3週','','','4週','','', '予', '', '🏁'] 
+  },
+  '3m': { 
+    my: [0,1.0,1.8,2.5,3.0,3.8,4.5,5.0,5.3,5.5,5.2,5.3], 
+    avg: [0,0.5,0.9,1.2,1.6,2.0,2.4,2.8,3.0,3.1,3.1,3.2], 
+    ai_pred: [null,null,null,null,null,null,null,null,null,null,null,5.3, 5.8, 6.5, 7.3],
+    labels: ['4月','','','5月','','','6月','','','7月','','', '予', '', '🏁'] 
+  },
+  '1y': { 
+    my: [0,0.5,1.2,1.8,2.1,2.8,3.2,3.8,4.1,4.5,4.8,5.3], 
+    avg: [0,0.3,0.8,1.0,1.3,1.8,2.0,2.3,2.5,2.8,3.0,3.2], 
+    ai_pred: [null,null,null,null,null,null,null,null,null,null,null,5.3, 6.0, 7.2, 8.5],
+    labels: ['6月','7月','8月','9月','10月','11月','12月','1月','2月','3月','4月','5月', '予', '', '🏁'] 
+  },
 };
 let currentPerfPeriod = '1m';
 
@@ -70,6 +90,7 @@ const FEED_DATA = [
   {
     user: '田中さん', initial: '田', color: '#FF6B9D',
     time: '2時間前',
+    goal: 'ハワイ旅行のために', amount: '＋¥500',
     content: 'コツコツ積み立てて3ヶ月！ついに利益が¥10,000を超えました 🎉 おつり投資の威力を実感しています。',
     stock: 'VOO', stockChange: '+8.1%', positive: true,
     likes: 24, comments: 5
@@ -77,6 +98,7 @@ const FEED_DATA = [
   {
     user: '鈴木さん', initial: '鈴', color: '#4FC3F7',
     time: '5時間前',
+    goal: 'MacBook購入に向けて', amount: '＋¥73',
     content: '今日のコンビニのおつり¥73がそのまま全世界株式へ。小さな一歩だけど、将来の自分に投資している気分です ☺️',
     stock: 'VT', stockChange: '+2.4%', positive: true,
     likes: 18, comments: 3
@@ -84,6 +106,7 @@ const FEED_DATA = [
   {
     user: '佐藤さん', initial: '佐', color: '#FFB347',
     time: '昨日',
+    goal: '車の頭金に', amount: '＋¥4,200',
     content: '自動投資をONにしてから1ヶ月。合計¥4,200が自動で投資されていた！気づかないうちに貯まるのが良い 👍',
     stock: 'EWJ', stockChange: '+1.8%', positive: true,
     likes: 31, comments: 8
@@ -91,6 +114,7 @@ const FEED_DATA = [
   {
     user: '高橋さん', initial: '高', color: '#3CDFAB',
     time: '2日前',
+    goal: '老後資金として', amount: '＋¥10,000',
     content: '投資初心者だったけど、おつりからなら怖くない。少しずつ勉強も始めました。このアプリのおかげで一歩踏み出せた！',
     stock: null, stockChange: null, positive: true,
     likes: 42, comments: 12
@@ -117,6 +141,7 @@ let likedPosts = new Set();
 let openComments = new Set();
 let animationFrameId = null;
 let currentInvestmentTarget = HOLDINGS_DATA[0];
+let totalAssets = 24831;
 
 // ==========================================
 // INITIALIZATION
@@ -136,6 +161,14 @@ document.addEventListener('DOMContentLoaded', () => {
   setupPeriodSelector();
   setupPerformancePeriodSelector();
   setupFab();
+  
+  const closeBtn = document.getElementById('celebration-close');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      document.getElementById('celebration-overlay').classList.add('hidden');
+      document.getElementById('confetti-container').innerHTML = '';
+    });
+  }
 });
 
 // ==========================================
@@ -210,6 +243,10 @@ function initApp() {
   renderNotifications();
   renderRanking();
   initGoalBanner();
+
+  if (!isAmountHidden) {
+    animateValue('total-amount', 0, totalAssets, 2000);
+  }
 
   // Draw charts after a short delay for animations
   setTimeout(() => {
@@ -399,6 +436,13 @@ function renderCommunityFeed() {
           <div class="feed-time">${f.time}</div>
         </div>
       </div>
+      ${f.goal ? `
+      <div class="feed-goal-badge">
+        <span class="goal-icon">🎯</span>
+        <span class="goal-text">${f.goal}</span>
+        <span class="goal-amount">${f.amount}</span>
+      </div>
+      ` : ''}
       <div class="feed-content">${f.content}</div>
       ${f.stock ? `
         <div class="feed-stock-tag">
@@ -486,8 +530,9 @@ function renderRanking() {
 
 function initGoalBanner() {
   const goal = 50000;
-  const current = 24831;
-  const pct = (current / goal * 100).toFixed(1);
+  const current = typeof totalAssets !== 'undefined' ? totalAssets : 24831;
+  let pct = (current / goal * 100).toFixed(1);
+  if (pct > 100) pct = 100.0;
   const endOfYear = new Date(new Date().getFullYear(), 11, 31);
   const today = new Date();
   const daysLeft = Math.ceil((endOfYear - today) / (1000 * 60 * 60 * 24));
@@ -516,254 +561,208 @@ function renderNotifications() {
 }
 
 // ==========================================
-// CHARTS (Canvas 2D)
+// CHARTS (Chart.js)
 // ==========================================
+let miniChartInstance = null;
+let txChartInstance = null;
+let donutChartInstance = null;
+let perfChartInstance = null;
+
+// Initialize Chart defaults
+if (typeof Chart !== 'undefined') {
+  Chart.defaults.color = '#9898b0';
+  Chart.defaults.font.family = "'Inter', 'Noto Sans JP', sans-serif";
+}
+
 function drawMiniChart() {
   const canvas = document.getElementById('mini-chart-canvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const dpr = window.devicePixelRatio || 1;
-  canvas.width = canvas.offsetWidth * dpr;
-  canvas.height = canvas.offsetHeight * dpr;
-  ctx.scale(dpr, dpr);
-  const w = canvas.offsetWidth;
-  const h = canvas.offsetHeight;
+  if (!canvas || typeof Chart === 'undefined') return;
 
   const data = [18, 20, 19, 22, 21, 23, 22, 24, 23, 25, 24, 26, 25, 27, 28, 27, 29, 28, 30, 29, 31, 30, 32, 33, 32, 34, 33, 35, 34];
 
-  ctx.clearRect(0, 0, w, h);
+  if (miniChartInstance) {
+    miniChartInstance.destroy();
+  }
 
-  // Gradient fill
-  const gradient = ctx.createLinearGradient(0, 0, 0, h);
+  const ctx = canvas.getContext('2d');
+  const gradient = ctx.createLinearGradient(0, 0, 0, canvas.offsetHeight);
   gradient.addColorStop(0, 'rgba(108, 99, 255, 0.3)');
   gradient.addColorStop(1, 'rgba(108, 99, 255, 0)');
 
-  const min = Math.min(...data) - 2;
-  const max = Math.max(...data) + 2;
-  const xStep = w / (data.length - 1);
-
-  // Draw fill
-  ctx.beginPath();
-  ctx.moveTo(0, h);
-  data.forEach((d, i) => {
-    const x = i * xStep;
-    const y = h - ((d - min) / (max - min)) * h;
-    if (i === 0) ctx.lineTo(x, y);
-    else {
-      const prevX = (i - 1) * xStep;
-      const prevY = h - ((data[i - 1] - min) / (max - min)) * h;
-      const cpx = (prevX + x) / 2;
-      ctx.bezierCurveTo(cpx, prevY, cpx, y, x, y);
+  miniChartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: data.map((_, i) => i),
+      datasets: [{
+        data: data,
+        borderColor: '#3CDFAB',
+        backgroundColor: gradient,
+        borderWidth: 2,
+        fill: true,
+        pointRadius: 0,
+        pointHitRadius: 10,
+        tension: 0.4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      scales: { x: { display: false }, y: { display: false, min: Math.min(...data) - 2, max: Math.max(...data) + 2 } },
+      layout: { padding: 0 }
     }
   });
-  ctx.lineTo(w, h);
-  ctx.closePath();
-  ctx.fillStyle = gradient;
-  ctx.fill();
-
-  // Draw line
-  const lineGrad = ctx.createLinearGradient(0, 0, w, 0);
-  lineGrad.addColorStop(0, '#6C63FF');
-  lineGrad.addColorStop(1, '#3CDFAB');
-
-  ctx.beginPath();
-  data.forEach((d, i) => {
-    const x = i * xStep;
-    const y = h - ((d - min) / (max - min)) * h;
-    if (i === 0) ctx.moveTo(x, y);
-    else {
-      const prevX = (i - 1) * xStep;
-      const prevY = h - ((data[i - 1] - min) / (max - min)) * h;
-      const cpx = (prevX + x) / 2;
-      ctx.bezierCurveTo(cpx, prevY, cpx, y, x, y);
-    }
-  });
-  ctx.strokeStyle = lineGrad;
-  ctx.lineWidth = 2;
-  ctx.stroke();
-
-  // Draw end dot
-  const lastX = (data.length - 1) * xStep;
-  const lastY = h - ((data[data.length - 1] - min) / (max - min)) * h;
-  ctx.beginPath();
-  ctx.arc(lastX, lastY, 4, 0, Math.PI * 2);
-  ctx.fillStyle = '#3CDFAB';
-  ctx.fill();
-  ctx.beginPath();
-  ctx.arc(lastX, lastY, 7, 0, Math.PI * 2);
-  ctx.strokeStyle = 'rgba(60, 223, 171, 0.3)';
-  ctx.lineWidth = 2;
-  ctx.stroke();
 }
 
 function drawTransactionChart() {
   const canvas = document.getElementById('transaction-chart');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const dpr = window.devicePixelRatio || 1;
-  canvas.width = canvas.offsetWidth * dpr;
-  canvas.height = canvas.offsetHeight * dpr;
-  ctx.scale(dpr, dpr);
-  const w = canvas.offsetWidth;
-  const h = canvas.offsetHeight;
+  if (!canvas || typeof Chart === 'undefined') return;
 
   const days = ['月', '火', '水', '木', '金', '土', '日'];
   const data = [120, 85, 210, 45, 175, 95, 150];
-  const maxVal = Math.max(...data) * 1.2;
-  const barWidth = (w - 60) / days.length;
-  const barMaxHeight = h - 40;
 
-  ctx.clearRect(0, 0, w, h);
+  if (txChartInstance) txChartInstance.destroy();
 
-  data.forEach((val, i) => {
-    const barH = (val / maxVal) * barMaxHeight;
-    const x = 30 + i * barWidth + barWidth * 0.2;
-    const barW = barWidth * 0.6;
-    const y = h - 30 - barH;
+  const ctx = canvas.getContext('2d');
+  const grad = ctx.createLinearGradient(0, 0, 0, canvas.offsetHeight);
+  grad.addColorStop(0, '#6C63FF');
+  grad.addColorStop(1, 'rgba(108, 99, 255, 0.3)');
 
-    // Bar gradient
-    const grad = ctx.createLinearGradient(0, y, 0, h - 30);
-    grad.addColorStop(0, '#6C63FF');
-    grad.addColorStop(1, 'rgba(108, 99, 255, 0.3)');
-
-    // Rounded bar
-    const radius = 6;
-    ctx.beginPath();
-    ctx.moveTo(x + radius, y);
-    ctx.lineTo(x + barW - radius, y);
-    ctx.quadraticCurveTo(x + barW, y, x + barW, y + radius);
-    ctx.lineTo(x + barW, h - 30);
-    ctx.lineTo(x, h - 30);
-    ctx.lineTo(x, y + radius);
-    ctx.quadraticCurveTo(x, y, x + radius, y);
-    ctx.closePath();
-    ctx.fillStyle = grad;
-    ctx.fill();
-
-    // Labels
-    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text-tertiary').trim() || '#6a6a84';
-    ctx.font = '11px Inter, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(days[i], x + barW / 2, h - 10);
-
-    // Value on top
-    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim() || '#9898b0';
-    ctx.font = '10px Inter, sans-serif';
-    ctx.fillText(`¥${val}`, x + barW / 2, y - 8);
+  txChartInstance = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: days,
+      datasets: [{
+        data: data,
+        backgroundColor: grad,
+        borderRadius: 6,
+        barThickness: 16
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(26, 26, 40, 0.9)',
+          titleColor: '#fff',
+          bodyColor: '#3CDFAB',
+          callbacks: { label: (context) => '¥' + context.parsed.y }
+        }
+      },
+      scales: {
+        x: { grid: { display: false, drawBorder: false } },
+        y: { display: false, beginAtZero: true }
+      }
+    }
   });
 }
 
 function drawDonutChart() {
   const canvas = document.getElementById('donut-chart');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const dpr = window.devicePixelRatio || 1;
-  canvas.width = canvas.offsetWidth * dpr;
-  canvas.height = canvas.offsetHeight * dpr;
-  ctx.scale(dpr, dpr);
-  const w = canvas.offsetWidth;
-  const h = canvas.offsetHeight;
-  const cx = w / 2;
-  const cy = h / 2;
-  const radius = Math.min(w, h) / 2 - 10;
-  const innerRadius = radius * 0.65;
+  if (!canvas || typeof Chart === 'undefined') return;
 
-  ctx.clearRect(0, 0, w, h);
+  if (donutChartInstance) donutChartInstance.destroy();
 
-  let startAngle = -Math.PI / 2;
-  HOLDINGS_DATA.forEach(holding => {
-    const sliceAngle = (holding.percent / 100) * Math.PI * 2;
-    const endAngle = startAngle + sliceAngle;
+  const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-primary').trim() || '#0a0a0f';
 
-    ctx.beginPath();
-    ctx.arc(cx, cy, radius, startAngle, endAngle);
-    ctx.arc(cx, cy, innerRadius, endAngle, startAngle, true);
-    ctx.closePath();
-    ctx.fillStyle = holding.color;
-    ctx.fill();
-
-    // Gap between segments
-    ctx.beginPath();
-    ctx.arc(cx, cy, radius, endAngle - 0.02, endAngle + 0.02);
-    ctx.arc(cx, cy, innerRadius, endAngle + 0.02, endAngle - 0.02, true);
-    ctx.closePath();
-    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--bg-primary').trim() || '#0a0a0f';
-    ctx.fill();
-
-    startAngle = endAngle;
+  donutChartInstance = new Chart(canvas, {
+    type: 'doughnut',
+    data: {
+      labels: HOLDINGS_DATA.map(h => h.name),
+      datasets: [{
+        data: HOLDINGS_DATA.map(h => h.percent),
+        backgroundColor: HOLDINGS_DATA.map(h => h.color),
+        borderWidth: 2,
+        borderColor: bgColor,
+        hoverOffset: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '70%',
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(26, 26, 40, 0.9)',
+          callbacks: { label: (context) => ' ' + context.parsed + '%' }
+        }
+      }
+    }
   });
 }
 
 function drawPerformanceChart() {
   const canvas = document.getElementById('performance-chart');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const dpr = window.devicePixelRatio || 1;
-  canvas.width = canvas.offsetWidth * dpr;
-  canvas.height = canvas.offsetHeight * dpr;
-  ctx.scale(dpr, dpr);
-  const w = canvas.offsetWidth;
-  const h = canvas.offsetHeight;
+  if (!canvas || typeof Chart === 'undefined') return;
 
   const dataset = PERF_DATA[currentPerfPeriod];
-  const myData = dataset.my;
-  const avgData = dataset.avg;
+  
+  if (perfChartInstance) perfChartInstance.destroy();
 
-  const allData = [...myData, ...avgData];
-  const min = Math.min(...allData) - 0.5;
-  const max = Math.max(...allData) + 0.5;
-  const xStep = w / (myData.length - 1);
-  const padding = 4;
-
-  ctx.clearRect(0, 0, w, h);
-
-  // Draw average line (behind)
-  drawSmoothLine(ctx, avgData, min, max, w, h, xStep, 'rgba(108, 99, 255, 0.25)', 2);
-
-  // Draw my data with fill
-  const gradient = ctx.createLinearGradient(0, 0, 0, h);
+  const ctx = canvas.getContext('2d');
+  const gradient = ctx.createLinearGradient(0, 0, 0, canvas.offsetHeight);
   gradient.addColorStop(0, 'rgba(108, 99, 255, 0.2)');
   gradient.addColorStop(1, 'rgba(108, 99, 255, 0)');
 
-  ctx.beginPath();
-  ctx.moveTo(0, h);
-  myData.forEach((d, i) => {
-    const x = i * xStep;
-    const y = h - padding - ((d - min) / (max - min)) * (h - padding * 2);
-    if (i === 0) ctx.lineTo(x, y);
-    else {
-      const prevX = (i - 1) * xStep;
-      const prevY = h - padding - ((myData[i - 1] - min) / (max - min)) * (h - padding * 2);
-      const cpx = (prevX + x) / 2;
-      ctx.bezierCurveTo(cpx, prevY, cpx, y, x, y);
+  perfChartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: dataset.labels,
+      datasets: [
+        {
+          label: 'あなた',
+          data: dataset.my,
+          borderColor: '#6C63FF',
+          backgroundColor: gradient,
+          borderWidth: 2.5,
+          fill: true,
+          tension: 0.4,
+          pointRadius: 0,
+          pointHitRadius: 10
+        },
+        {
+          label: 'AI予測',
+          data: dataset.ai_pred,
+          borderColor: '#3CDFAB',
+          borderWidth: 2,
+          borderDash: [5, 5],
+          fill: false,
+          tension: 0.4,
+          pointRadius: 0,
+          pointHitRadius: 10
+        },
+        {
+          label: '平均',
+          data: dataset.avg,
+          borderColor: 'rgba(108, 99, 255, 0.25)',
+          borderWidth: 2,
+          fill: false,
+          tension: 0.4,
+          pointRadius: 0,
+          pointHitRadius: 10
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(26, 26, 40, 0.9)',
+          callbacks: { label: (context) => context.dataset.label + ': ' + context.parsed.y + '%' }
+        }
+      },
+      scales: {
+        x: { grid: { display: false, drawBorder: false }, ticks: { maxTicksLimit: 6 } },
+        y: { grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false }, ticks: { callback: (val) => val + '%' } }
+      }
     }
   });
-  ctx.lineTo(w, h);
-  ctx.closePath();
-  ctx.fillStyle = gradient;
-  ctx.fill();
-
-  // Draw my line
-  drawSmoothLine(ctx, myData, min, max, w, h, xStep, '#6C63FF', 2.5);
-}
-
-function drawSmoothLine(ctx, data, min, max, w, h, xStep, color, lineWidth) {
-  const padding = 4;
-  ctx.beginPath();
-  data.forEach((d, i) => {
-    const x = i * xStep;
-    const y = h - padding - ((d - min) / (max - min)) * (h - padding * 2);
-    if (i === 0) ctx.moveTo(x, y);
-    else {
-      const prevX = (i - 1) * xStep;
-      const prevY = h - padding - ((data[i - 1] - min) / (max - min)) * (h - padding * 2);
-      const cpx = (prevX + x) / 2;
-      ctx.bezierCurveTo(cpx, prevY, cpx, y, x, y);
-    }
-  });
-  ctx.strokeStyle = color;
-  ctx.lineWidth = lineWidth;
-  ctx.stroke();
 }
 
 // ==========================================
@@ -1123,6 +1122,14 @@ function confirmManualInvest() {
     return;
   }
   closeModal();
+
+  const startAssets = totalAssets;
+  totalAssets += amount;
+  if (!isAmountHidden) {
+    animateValue('total-amount', startAssets, totalAssets, 1500);
+  }
+  initGoalBanner();
+
   showToast('✅', `¥${amount.toLocaleString()}を${currentInvestmentTarget.name}に投資しました！`);
   setTimeout(() => showCelebration('投資完了！', `¥${amount.toLocaleString()}が\n${currentInvestmentTarget.name}に投資されました 🚀`), 400);
 }
@@ -1177,6 +1184,26 @@ function createConfetti() {
 // ==========================================
 // HELPERS
 // ==========================================
+function animateValue(id, start, end, duration) {
+  if (start === end) return;
+  const obj = document.getElementById(id);
+  if (!obj) return;
+  let startTimestamp = null;
+  const step = (timestamp) => {
+    if (!startTimestamp) startTimestamp = timestamp;
+    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+    const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+    const current = Math.floor(start + (end - start) * easeOutQuart);
+    obj.innerHTML = current.toLocaleString();
+    if (progress < 1) {
+      window.requestAnimationFrame(step);
+    } else {
+      obj.innerHTML = end.toLocaleString();
+    }
+  };
+  window.requestAnimationFrame(step);
+}
+
 function formatDate(dateStr) {
   const date = new Date(dateStr);
   const today = new Date();

@@ -388,11 +388,22 @@
               <button class="perf-period-btn" data-perf="1y">1年</button>
             </div>
           </div>
+          
+          <div class="ai-prediction-banner">
+            <span class="ai-sparkle">✨</span>
+            <span class="ai-text">AI目標到達予想: <strong>2027年3月</strong> (2ヶ月前倒しペース！)</span>
+          </div>
+
           <canvas id="performance-chart" width="320" height="160"></canvas>
+          
           <div class="performance-legend">
             <div class="legend-item">
               <span class="legend-dot" style="background: #6C63FF;"></span>
               <span>あなた</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot" style="background: #3CDFAB;"></span>
+              <span>AI予測</span>
             </div>
             <div class="legend-item">
               <span class="legend-dot" style="background: rgba(108,99,255,0.3);"></span>
@@ -693,6 +704,7 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="app.js"></script>
   <script>
     if ('serviceWorker' in navigator) {
