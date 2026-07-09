@@ -147,13 +147,16 @@ let totalAssets = 24831;
 // INITIALIZATION
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
-  // Splash → Onboarding after splash animation
+  // Splash → Onboarding after splash animation (CSS: 2.8s delay + 0.6s duration = 3.4s)
   setTimeout(() => {
     const splash = document.getElementById('splash-screen');
     const onboard = document.getElementById('onboarding-screen');
-    if (splash) splash.classList.add('hidden');
+    if (splash) {
+      splash.classList.add('hidden');
+      splash.style.display = 'none';
+    }
     if (onboard) onboard.classList.remove('hidden');
-  }, 3400);
+  }, 3600);
 
   try { setupOnboarding(); } catch(e) { console.error('setupOnboarding:', e); }
   try { setupNavigation(); } catch(e) { console.error('setupNavigation:', e); }

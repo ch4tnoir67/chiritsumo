@@ -203,7 +203,7 @@ body {
 }
 
 @keyframes splashFadeOut {
-  to { opacity: 0; pointer-events: none; }
+  to { opacity: 0; pointer-events: none; visibility: hidden; }
 }
 
 @keyframes fadeUp {
